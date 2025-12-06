@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/sellmannwaks/static/css/main.1e4222d3.css",
+    "main.js": "/sellmannwaks/static/js/main.3a86124f.js",
+    "index.html": "/sellmannwaks/index.html",
+    "main.1e4222d3.css.map": "/sellmannwaks/static/css/main.1e4222d3.css.map",
+    "main.3a86124f.js.map": "/sellmannwaks/static/js/main.3a86124f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1e4222d3.css",
+    "static/js/main.3a86124f.js"
+  ]
+}

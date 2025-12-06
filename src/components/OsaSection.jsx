@@ -244,7 +244,7 @@ export default function OsaSection() {
           </Modal>
         </div>
 
-        <img src="/images/bordeaux_edit.jpg" alt="bordeaux" />
+        <img src="./images/bordeaux_edit.jpg" alt="bordeaux" />
       </div>
     </section>
   );

@@ -12,7 +12,7 @@ export default function Barn() {
             bort får förstås vara med under hela helgen.
           </p>
         </div>
-        <img src="/images/grimage.jpg" alt="barn" />
+        <img src="./images/grimage.jpg" alt="barn" />
       </div>
     </section>
   );

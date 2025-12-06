@@ -4,7 +4,7 @@ export default function Toastmasters() {
   return (
     <section id="toast" style={{ padding: "0 20px" }}>
       <div className="two-column">
-        <img src="/images/toast_robin.jpg" alt="Toastmasters" />
+        <img src="./images/toast_robin.jpg" alt="Toastmasters" />
         <div className="peach-block">
           <h1>Toastmasters</h1>
           <p>

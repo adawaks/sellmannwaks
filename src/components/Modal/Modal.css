@@ -1,0 +1,119 @@
+/* Disable scroll behind modal */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding-top: 90px; /* account for banner */
+}
+
+/* Modal box */
+.modal-content {
+  background: white;
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  position: relative;
+  animation: modalFade 0.25s ease-out;
+  max-height: calc(100vh - 90px - 40px); /* viewport minus banner and padding */
+  overflow-y: auto;
+}
+
+/* Close button */
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* Make the modal trigger match the Skicka button used in .peach-block */
+.modal-open-btn {
+  background-color: #D4E2D0;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.modal-open-btn:hover { opacity: 0.95; }
+
+/* Small fade animation */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Success checkmark animation */
+.submission-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 12px;
+}
+
+.checkmark {
+  width: 120px;
+  height: 120px;
+}
+
+.checkmark__circle {
+  fill: none;
+  stroke: #28a745;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 380;
+  stroke-dashoffset: 380;
+  animation: drawCircle 0.6s ease-out forwards;
+}
+
+.checkmark__check {
+  fill: none;
+  stroke: #28a745;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawCheck 0.4s ease-out 0.55s forwards;
+}
+
+@keyframes drawCircle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+.submission-success p {
+  text-align: center;
+  color: #155724;
+  margin: 0;
+  font-weight: 500;
+}

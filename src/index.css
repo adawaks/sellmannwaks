@@ -144,7 +144,7 @@ main { padding-top: 90px; max-width: 1080px; margin: 0 auto; }
   font-size: 14px;
 }
 .btn-modal:hover {
-  opacity: 0.95;
+  opacity: 0.80;
 }
 
 /* --- Yes/No Question styling --- */

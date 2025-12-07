@@ -147,6 +147,16 @@ main { padding-top: 90px; max-width: 1080px; margin: 0 auto; }
   opacity: 0.80;
 }
 
+.btn-modal:active {
+  color: #D4E2D0;
+}
+
+.btn-modal.selected {
+  background-color: #ffffff;  /* highlight color */
+  color: white;
+  opacity: 1;
+}
+
 /* --- Yes/No Question styling --- */
 .question-block {
   margin: 16px 0;

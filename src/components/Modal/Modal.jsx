@@ -1,16 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Modal.css";
 
-export default function Modal({ buttonLabel, isOpen: controlledIsOpen, onClose: controlledOnClose, children }) {
+export default function Modal({
+  buttonLabel,
+  isOpen: controlledIsOpen,
+  onClose: controlledOnClose,
+  onOpen,
+  children,
+}) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const wasOpen = useRef(false);
   const isControlled = controlledIsOpen !== undefined;
   const isOpen = isControlled ? controlledIsOpen : uncontrolledOpen;
 
   useEffect(() => {
-    if (isOpen) document.body.classList.add("modal-open");
-    else document.body.classList.remove("modal-open");
-    return () => document.body.classList.remove("modal-open");
-  }, [isOpen]);
+    if (isOpen) {
+      document.body.classList.add("modal-open");
+      if (!wasOpen.current) {
+        onOpen && onOpen(); // Reset form only on first open
+        wasOpen.current = true;
+      }
+    } else {
+      document.body.classList.remove("modal-open");
+      wasOpen.current = false;
+    }
+  }, [isOpen, onOpen]);
 
   const open = () => {
     if (isControlled) return;
@@ -18,17 +32,16 @@ export default function Modal({ buttonLabel, isOpen: controlledIsOpen, onClose: 
   };
 
   const close = () => {
-    if (isControlled) {
-      controlledOnClose && controlledOnClose();
-    } else {
-      setUncontrolledOpen(false);
-    }
+    if (isControlled) controlledOnClose && controlledOnClose();
+    else setUncontrolledOpen(false);
   };
 
   return (
     <>
       {buttonLabel && (
-        <button type="button" className="modal-open-btn" onClick={open}>{buttonLabel}</button>
+        <button type="button" className="modal-open-btn" onClick={open}>
+          {buttonLabel}
+        </button>
       )}
 
       {isOpen && (

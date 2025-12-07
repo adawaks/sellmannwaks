@@ -2,236 +2,206 @@ import React, { useState } from "react";
 import Modal from "./Modal/Modal";
 
 export default function OsaSection() {
-  const [answers, setAnswers] = useState({
-    attendingWedding: null,
-    dietaryRestrictions: null,
+  const initialAnswers = {
+    name: "",
+    email: "",
+    attendingWedding: "",
+    dietaryRestrictions: "",
     dietaryDetails: "",
-    attendanceDays: {
-      friday: false,
-      saturday: false,
-      sunday: false,
-    },
+    attendanceDays: { friday: false, saturday: false, sunday: false },
     danceMusic: "",
-  });
-
-  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success' | 'error' | null
-  const [submissionMessage, setSubmissionMessage] = useState("");
-
-  const handleAnswer = (question, answer) => {
-    setAnswers(prev => ({ ...prev, [question]: answer }));
+    message: "",
   };
 
-  const handleDayChange = (day) => {
-    setAnswers(prev => ({
+  const [answers, setAnswers] = useState(initialAnswers);
+  const [submitted, setSubmitted] = useState(false);
+
+  // Reset form when modal opens
+  const handleModalOpen = () => {
+    setAnswers(initialAnswers);
+    setSubmitted(false);
+  };
+
+  const handleAnswer = (question, answer) =>
+    setAnswers((prev) => ({ ...prev, [question]: answer }));
+
+  const handleDayChange = (day) =>
+    setAnswers((prev) => ({
       ...prev,
-      attendanceDays: {
-        ...prev.attendanceDays,
-        [day]: !prev.attendanceDays[day],
-      },
+      attendanceDays: { ...prev.attendanceDays, [day]: !prev.attendanceDays[day] },
     }));
-  };
 
-  const handleInputChange = (field, value) => {
-    setAnswers(prev => ({ ...prev, [field]: value }));
-  };
+  const handleInputChange = (field, value) =>
+    setAnswers((prev) => ({ ...prev, [field]: value }));
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const fields = {
-      name: document.querySelector('input[name="name"]').value,
-      email: document.querySelector('input[name="email"]').value,
-      attendingWedding: answers.attendingWedding || "",
-      dietaryRestrictions: answers.dietaryRestrictions || "",
-      dietaryDetails: answers.dietaryDetails || "",
-      attendanceDays: Object.keys(answers.attendanceDays)
-        .filter(day => answers.attendanceDays[day])
-        .join(", "),
-      danceMusic: answers.danceMusic || "",
-      message: document.querySelector('textarea[name="message"]').value || "",
-      _captcha: "false",
-    };
+    const formData = new FormData();
+    formData.append("Name", answers.name);
+    formData.append("Email", answers.email);
+    formData.append("AttendingWedding", answers.attendingWedding);
+    formData.append("DietaryRestrictions", answers.dietaryRestrictions);
+    formData.append("DietaryDetails", answers.dietaryDetails);
+    formData.append(
+      "AttendanceDays",
+      Object.keys(answers.attendanceDays)
+        .filter((day) => answers.attendanceDays[day])
+        .join(", ")
+    );
+    formData.append("DanceMusic", answers.danceMusic);
+    formData.append("Message", answers.message);
 
-    const url = "https://script.google.com/macros/s/AKfycbzUefX98Nadjj9Pt5vQ4AMQ6vyNwofU6f6A_HR2hI995aLJLJ1P5ni-DZ7TXwZHW96PHA/exec";
-
-    try {
-      const body = new URLSearchParams(fields);
-
-      const res = await fetch(url, {
+    fetch(
+      "https://script.google.com/macros/s/AKfycbzw5tLas-Za0AXm1oHUzb2Z4AdQe7yIt_AFdDW4pjr2db8J9Aj4PHsBR61w_QCgGz3PsQ/exec",
+      {
         method: "POST",
-        body: body,
+        body: formData,
+      }
+    )
+      .then(() => {
+        setSubmitted(true); // Show checkmark
+      })
+      .catch((err) => {
+        console.error("Form submission failed:", err);
+        alert("Något gick fel med formuläret. Försök igen.");
       });
-
-      let json;
-      try {
-        json = await res.json();
-      } catch {
-        throw new Error("Invalid response from server");
-      }
-
-      if (json.status === "success") {
-        setSubmissionStatus("success");
-        setSubmissionMessage(json.message || "Tack för ditt svar!");
-      } else {
-        setSubmissionStatus("error");
-        setSubmissionMessage(json.message || "Ett fel uppstod.");
-      }
-    } catch (err) {
-      setSubmissionStatus("error");
-      setSubmissionMessage("Något gick fel: " + (err.message || err));
-    }
-
-    // Reset the UI exactly like before
-    setAnswers({
-      attendingWedding: null,
-      dietaryRestrictions: null,
-      dietaryDetails: "",
-      attendanceDays: { friday: false, saturday: false, sunday: false },
-      danceMusic: "",
-    });
   };
 
   return (
     <section id="OSA" className="centered-block">
       <div className="two-column">
-        
         <div>
-          <h1>OSA snarast </h1>
+          <h1>OSA snarast</h1>
           <h2>(men senast 30:e april)</h2>
           <div style={{ height: 12 }} />
 
-          <Modal buttonLabel="Öppna OSA-formulär">
+          <Modal buttonLabel="Öppna OSA-formulär" onOpen={handleModalOpen}>
             <>
               <h2>OSA</h2>
               <p>Fyll i formuläret nedan:</p>
 
-              {submissionStatus === 'success' ? (
-                <div className="submission-success" role="status" aria-live="polite">
+              {submitted ? (
+                <div className="submission-success">
                   <svg className="checkmark" viewBox="0 0 120 120" aria-hidden="true">
                     <circle className="checkmark__circle" cx="60" cy="60" r="54" />
                     <path className="checkmark__check" d="M34 62 L52 80 L86 44" />
                   </svg>
-                  <p>Dina svar har blivit skickade. Kolla din mail för bekräftelse att svaren blivit skickade som de ska.</p>
+                  <p>Dina svar har blivit skickade! Tack!</p>
                 </div>
               ) : (
-                <>
-                  {submissionStatus === 'error' && (
-                    <div className={`submission-message ${submissionStatus}`} style={{ marginBottom: 12 }}>
-                      {submissionMessage}
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    placeholder="Ditt namn"
+                    value={answers.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    required
+                  />
+                  <br />
+                  <input
+                    type="email"
+                    placeholder="Din e-post"
+                    value={answers.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    required
+                  />
+
+                  {/* Attending Wedding */}
+                  <div className="question-block">
+                    <label>Kommer du på bröllopet?</label>
+                    <div className="button-group">
+                      <button
+                        type="button"
+                        className={answers.attendingWedding === "yes" ? "selected" : ""}
+                        onClick={() => handleAnswer("attendingWedding", "yes")}
+                      >
+                        JAAAAAA!!!!
+                      </button>
+                      <button
+                        type="button"
+                        className={answers.attendingWedding === "no" ? "selected" : ""}
+                        onClick={() => handleAnswer("attendingWedding", "no")}
+                      >
+                        Nej
+                      </button>
                     </div>
-                  )}
+                  </div>
 
-                  <form onSubmit={handleSubmit} noValidate>
-                    <input type="hidden" name="_captcha" value="false" />
-
-                    <input type="text" name="name" placeholder="Ditt namn" required />
-                    <br />
-                    <input type="email" name="email" placeholder="Din e-post" required />
-
-                    {/* Question 1 */}
-                    <div className="question-block">
-                      <label>Kommer du på bröllopet?</label>
-                      <div className="button-group">
-                        <button
-                          type="button"
-                          className={`yes-no-btn ${answers.attendingWedding === "yes" ? "selected" : ""}`}
-                          onClick={() => handleAnswer("attendingWedding", "yes")}
-                        >
-                          JAAAAAA!!!!
-                        </button>
-                        <button
-                          type="button"
-                          className={`yes-no-btn ${answers.attendingWedding === "no" ? "selected" : ""}`}
-                          onClick={() => handleAnswer("attendingWedding", "no")}
-                        >
-                          Nej
-                        </button>
-                      </div>
+                  {/* Dietary Restrictions */}
+                  <div className="question-block">
+                    <label>Har du några matpreferenser?</label>
+                    <div className="button-group">
+                      <button
+                        type="button"
+                        className={answers.dietaryRestrictions === "yes" ? "selected" : ""}
+                        onClick={() => handleAnswer("dietaryRestrictions", "yes")}
+                      >
+                        Ja
+                      </button>
+                      <button
+                        type="button"
+                        className={answers.dietaryRestrictions === "no" ? "selected" : ""}
+                        onClick={() => handleAnswer("dietaryRestrictions", "no")}
+                      >
+                        Nej
+                      </button>
                     </div>
-
-                    {/* Question 2 */}
-                    <div className="question-block">
-                      <label>Har du några matpreferenser?</label>
-                      <div className="button-group">
-                        <button
-                          type="button"
-                          className={`yes-no-btn ${answers.dietaryRestrictions === "yes" ? "selected" : ""}`}
-                          onClick={() => handleAnswer("dietaryRestrictions", "yes")}
-                        >
-                          Ja
-                        </button>
-                        <button
-                          type="button"
-                          className={`yes-no-btn ${answers.dietaryRestrictions === "no" ? "selected" : ""}`}
-                          onClick={() => handleAnswer("dietaryRestrictions", "no")}
-                        >
-                          Nej
-                        </button>
-                      </div>
-                      {answers.dietaryRestrictions === "yes" && (
-                        <input
-                          type="text"
-                          name="dietaryDetails"
-                          placeholder="Beskriv dina matpreferenser"
-                          value={answers.dietaryDetails}
-                          onChange={(e) => handleInputChange("dietaryDetails", e.target.value)}
-                          required
-                          style={{ marginTop: "8px" }}
-                        />
-                      )}
-                    </div>
-
-                    {/* Question 3 - Days attendance */}
-                    <div className="question-block">
-                      <label>Vilka av dagarna kan du/ni närvara?</label>
-                      <div className="checkbox-group">
-                        <label className="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={answers.attendanceDays.friday}
-                            onChange={() => handleDayChange("friday")}
-                          />
-                          Fredag - Lekar, middag och mingel
-                        </label>
-                        <label className="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={answers.attendanceDays.saturday}
-                            onChange={() => handleDayChange("saturday")}
-                          />
-                          Lördag - Vigsel, middag och fest
-                        </label>
-                        <label className="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={answers.attendanceDays.sunday}
-                            onChange={() => handleDayChange("sunday")}
-                          />
-                          Söndag - Brunch
-                        </label>
-                      </div>
-                    </div>
-
-                    {/* Question 5 - Dance music */}
-                    <div className="question-block">
-                      <label>Låt(-ar) som får dig upp på dansgolvet?</label>
+                    {answers.dietaryRestrictions === "yes" && (
                       <input
                         type="text"
-                        name="danceMusic"
-                        placeholder="Låten som välter dansgolvet!"
-                        value={answers.danceMusic}
-                        onChange={(e) => handleInputChange("danceMusic", e.target.value)}
+                        placeholder="Beskriv dina matpreferenser"
+                        value={answers.dietaryDetails}
+                        onChange={(e) => handleInputChange("dietaryDetails", e.target.value)}
                         style={{ marginTop: "8px" }}
                       />
+                    )}
+                  </div>
+
+                  {/* Attendance Days */}
+                  <div className="question-block">
+                    <label>Vilka av dagarna kan du/ni närvara?</label>
+                    <div className="checkbox-group">
+                      {["friday", "saturday", "sunday"].map((day) => (
+                        <label key={day} className="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={answers.attendanceDays[day]}
+                            onChange={() => handleDayChange(day)}
+                          />
+                          {day === "friday"
+                            ? "Fredag - Lekar, middag och mingel"
+                            : day === "saturday"
+                            ? "Lördag - Vigsel, middag och fest"
+                            : "Söndag - Brunch"}
+                        </label>
+                      ))}
                     </div>
+                  </div>
 
-                    <textarea name="message" placeholder="Övriga meddelanden (valfritt)" />
+                  {/* Dance Music */}
+                  <div className="question-block">
+                    <label>Låt(-ar) som får dig upp på dansgolvet?</label>
+                    <input
+                      type="text"
+                      placeholder="Låten som välter dansgolvet!"
+                      value={answers.danceMusic}
+                      onChange={(e) => handleInputChange("danceMusic", e.target.value)}
+                      style={{ marginTop: "8px" }}
+                    />
+                  </div>
 
-                    <button type="submit" className="btn-modal">
-                      Skicka
-                    </button>
-                  </form>
-                </>
+                  {/* Optional Message */}
+                  <textarea
+                    placeholder="Övriga meddelanden (valfritt)"
+                    value={answers.message}
+                    onChange={(e) => handleInputChange("message", e.target.value)}
+                  />
+
+                  <button type="submit" className="btn-modal">
+                    Skicka
+                  </button>
+                </form>
               )}
             </>
           </Modal>

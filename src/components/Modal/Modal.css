@@ -117,3 +117,7 @@ body.modal-open {
   margin: 0;
   font-weight: 500;
 }
+
+.modal-overlay.hide {
+  display: none;
+}

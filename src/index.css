@@ -61,6 +61,28 @@ h1, h2, h3, h4, h5, h6 {
 /* Give page content a top offset so banner doesn't overlap */
 main { padding-top: 90px; max-width: 1080px; margin: 0 auto; }
 
+.nav-links {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.brand {
+  font-family: 'Tangerine', cursive;
+  font-size: 48px;
+  letter-spacing: 2px;
+}
+
+/* hamburger hidden on desktop */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: white;
+  cursor: pointer;
+}
+
 /* --- Generic containers --- */
 .centered-block {
   padding: 30px;
@@ -286,10 +308,117 @@ main { padding-top: 90px; max-width: 1080px; margin: 0 auto; }
   object-fit: cover;
 }
 
+
+/* --- Three-column helper (image - text - image) --- */
+.three-column {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* left image | text | right image */
+  gap: 24px;
+  align-items: center;
+}
+
+.three-column img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  height: 100%; /* Ensures equal height */
+}
+
 /* smaller screens */
 @media (max-width: 800px) {
   .two-column { grid-template-columns: 1fr; }
   .banner { gap: 10px; padding: 10px; }
   .banner a[href="#top"] { font-size: 36px; }
   .event-box { grid-template-columns: 1fr; }
+
+  #toast .peach-block {
+    margin: 0;
+  }
+
+  /* Redefine grid ONLY for Toastmasters */
+  #toast .three-column {
+    grid-template-columns: 1fr 1.4fr;
+    grid-template-rows: 1fr 1fr;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  /* First image: top-left */
+  #toast .three-column img:first-of-type {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* Second image: bottom-left */
+  #toast .three-column img:last-of-type {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  /* Text box spans both rows on the right */
+  #toast .peach-block {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
+
+  /* Make images fill their grid cells */
+  #toast .three-column img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  /* Mobile-friendly form */
+  #toast form input,
+  #toast form textarea {
+    width: 100%;
+  }
 }
+
+@media (max-width: 800px) {
+  /* Hide desktop banner content */
+  .nav-links {
+    display: none;
+  }
+
+  /* Show hamburger */
+  .hamburger {
+    display: block;
+  }
+
+  /* Reduce banner height */
+  .banner {
+    justify-content: flex-start;
+    padding: 10px 16px;
+  }
+
+  /* Mobile dropdown menu */
+  .mobile-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: #FFE0D0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 0;
+    z-index: 999;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  .mobile-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+

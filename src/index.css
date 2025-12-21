@@ -200,7 +200,7 @@ main { padding-top: 90px; max-width: 1080px; margin: 0 auto; }
 .yes-no-btn {
   background-color: #e0e0e0;
   color: #333;
-  border: 2px solid #c0c0c0;
+  border: 2px solid #e0e0e0;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
@@ -212,9 +212,9 @@ main { padding-top: 90px; max-width: 1080px; margin: 0 auto; }
   border-color: #a0a0a0;
 }
 .yes-no-btn.selected {
-  background-color: #C3B091;
+  background-color: #FFE0D0;
   color: white;
-  border-color: #9d845a;
+  border-color: #FFE0D0;
 }
 
 /* submission message shown after form send */
@@ -284,6 +284,7 @@ main { padding-top: 90px; max-width: 1080px; margin: 0 auto; }
   cursor: pointer;
   width: 16px;
   height: 16px;
+  accent-color: #FFE0D0; /* match site colors */
 }
 
 /* --- Map iframe styling --- */

@@ -47,12 +47,9 @@ export default function OsaSection() {
     formData.append("AttendingWedding", answers.attendingWedding);
     formData.append("DietaryRestrictions", answers.dietaryRestrictions);
     formData.append("DietaryDetails", answers.dietaryDetails);
-    formData.append(
-      "AttendanceDays",
-      Object.keys(answers.attendanceDays)
-        .filter((day) => answers.attendanceDays[day])
-        .join(", ")
-    );
+    formData.append( "AttendanceDays_friday", answers.attendanceDays.friday ? "yes" : "no" ); 
+    formData.append( "AttendanceDays_saturday", answers.attendanceDays.saturday ? "yes" : "no" ); 
+    formData.append( "AttendanceDays_sunday", answers.attendanceDays.sunday ? "yes" : "no" );
     formData.append("DanceMusic", answers.danceMusic);
     formData.append("Message", answers.message);
 
@@ -82,7 +79,7 @@ export default function OsaSection() {
 
           <Modal buttonLabel="Öppna OSA-formulär" onOpen={handleModalOpen}>
             <>
-              <h2>OSA</h2>
+              <h1>OSA</h1>
               <p>Fyll i formuläret nedan, en per person.</p>
 
               {submitted ? (
@@ -186,7 +183,7 @@ export default function OsaSection() {
                             ? "Fredag - Lekar, middag och mingel"
                             : day === "saturday"
                             ? "Lördag - Vigsel, middag och fest"
-                            : "Söndag - Brunch"}
+                            : "Söndag - Brunch (à 195 kr/person)"}
                         </label>
                       ))}
                     </div>

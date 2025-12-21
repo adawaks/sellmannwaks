@@ -46,7 +46,13 @@ export default function ScheduleSection() {
         time="Tid: 10:00 – 12:00"
         title="Brunch"
         location="Kaffestugan, Nääs Slott (Nääs allé 12, 448 92 Floda)"
-        body="Helgen avrundas med brunch."
+        body={
+          <>
+            Helgen avrundas med brunch som annordnas av Nääs slott.
+            <br />
+            Pris: 195 kr/person, swisha gärna Lotta på 0724474008.
+          </>
+        }
         dress="Klädsel: Sommarledigt"
       />
     </section>

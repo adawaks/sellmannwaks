@@ -6,7 +6,7 @@ export default function Fotografering() {
       <div className="peach-block">
         <h1>Fotografering</h1>
         <p>
-          Ni får jättegärna ta bilder under fredagen, på dansgolvet på lörsdag och under söndagen.
+          Ni får jättegärna ta bilder under fredagen, på dansgolvet på lördag och under söndagen.
           Men under dagen och kvällen på lördagen kommer vi ha en fotograf med för att föreviga vår dag.
           Därför behöver inte ni tänka på att ta bilder, utan istället kan ni vara helt närvarande med oss.
         </p>

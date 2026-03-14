@@ -57,7 +57,7 @@ export default function NavBar() {
           <a href="#schema">Helgens schema</a>
           <a href="#toast">Toastmasters</a>
           <a href="#top" className="brand">Sellmann Waks</a>
-          <a href="#boende">Boende</a>
+          <a href="#boende">Transport</a>
           <a href="#foto">Fotografering</a>
           <a href="#barn">Barn</a>
           <a href="#presenter">Presenter</a>
@@ -71,7 +71,7 @@ export default function NavBar() {
           <a href="#karta" onClick={closeMenu}>Var?</a>
           <a href="#schema" onClick={closeMenu}>Helgens schema</a>
           <a href="#toast" onClick={closeMenu}>Toastmasters</a>
-          <a href="#boende" onClick={closeMenu}>Boende</a>
+          <a href="#boende" onClick={closeMenu}>Transport</a>
           <a href="#foto" onClick={closeMenu}>Fotografering</a>
           <a href="#barn" onClick={closeMenu}>Barn</a>
           <a href="#presenter" onClick={closeMenu}>Presenter</a>

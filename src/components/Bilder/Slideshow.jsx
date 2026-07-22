@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -9,6 +10,9 @@ export default function Slideshow({ images }) {
   const [isPresenterMode, setIsPresenterMode] =
     useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const touchStartPosition = useRef(null);
+  const touchHasMoved = useRef(false);
 
   const showNextImage = useCallback(() => {
     if (!images || images.length === 0) {
@@ -33,14 +37,6 @@ export default function Slideshow({ images }) {
         : previousIndex - 1
     );
   }, [images]);
-
-  const startSlideshow = () => {
-    setIsPlaying(true);
-  };
-
-  const stopSlideshow = () => {
-    setIsPlaying(false);
-  };
 
   const closePresenterMode = useCallback(async () => {
     setIsPresenterMode(false);
@@ -77,6 +73,75 @@ export default function Slideshow({ images }) {
         error
       );
     }
+  };
+
+  const handlePresenterClick = (event) => {
+    if (touchHasMoved.current) {
+      touchHasMoved.current = false;
+      return;
+    }
+
+    event.stopPropagation();
+    showNextImage();
+  };
+
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+
+    touchStartPosition.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+    };
+
+    touchHasMoved.current = false;
+  };
+
+  const handleTouchMove = (event) => {
+    if (!touchStartPosition.current) {
+      return;
+    }
+
+    const touch = event.touches[0];
+
+    const distanceX = Math.abs(
+      touch.clientX - touchStartPosition.current.x
+    );
+
+    const distanceY = Math.abs(
+      touch.clientY - touchStartPosition.current.y
+    );
+
+    if (distanceX > 10 || distanceY > 10) {
+      touchHasMoved.current = true;
+    }
+  };
+
+  const handleTouchEnd = async (event) => {
+    if (!touchStartPosition.current) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+
+    const distanceX =
+      touch.clientX - touchStartPosition.current.x;
+
+    const distanceY =
+      touch.clientY - touchStartPosition.current.y;
+
+    const swipeDistance = Math.sqrt(
+      distanceX * distanceX + distanceY * distanceY
+    );
+
+    touchStartPosition.current = null;
+
+    if (swipeDistance >= 60) {
+      touchHasMoved.current = true;
+      await closePresenterMode();
+      return;
+    }
+
+    touchHasMoved.current = false;
   };
 
   useEffect(() => {
@@ -227,7 +292,7 @@ export default function Slideshow({ images }) {
             <button
               type="button"
               className="slideshow-button"
-              onClick={stopSlideshow}
+              onClick={() => setIsPlaying(false)}
             >
               Pausa bildspel
             </button>
@@ -235,7 +300,7 @@ export default function Slideshow({ images }) {
             <button
               type="button"
               className="slideshow-button"
-              onClick={startSlideshow}
+              onClick={() => setIsPlaying(true)}
             >
               Starta bildspel
             </button>
@@ -262,20 +327,24 @@ export default function Slideshow({ images }) {
       {isPresenterMode && (
         <div
           className="presenter-overlay"
-          onClick={closePresenterMode}
+          onClick={handlePresenterClick}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           role="button"
           tabIndex={0}
-          aria-label="Stäng presentationsläget"
+          aria-label="Tryck för nästa bild eller svep för att avsluta"
         >
           <img
             key={imageKey}
             className="presenter-image"
             src={currentImage.secure_url}
             alt={`Bröllopsbild ${currentIndex + 1}`}
+            draggable="false"
           />
 
           <p className="presenter-help">
-            Klicka eller tryck Esc för att avsluta
+            Tryck för nästa bild · Svep för att avsluta
           </p>
         </div>
       )}

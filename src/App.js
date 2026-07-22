@@ -1,8 +1,13 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 import NavBar from "./components/NavBar";
-//import OsaSection from "./components/OsaSection";
+// import OsaSection from "./components/OsaSection";
 import MapSection from "./components/MapSection";
 import ScheduleSection from "./components/ScheduleSection";
 import Toastmasters from "./components/Toastmasters";
@@ -12,7 +17,7 @@ import Barn from "./components/Barn";
 import Presenter from "./components/Presenter";
 import BilderLink from "./components/BilderLink";
 import BilderPage from "./pages/BilderPage";
-
+import ProtectedGalleryRoute from "./components/ProtectedGalleryRoute";
 
 function MainPage() {
   return (
@@ -37,59 +42,53 @@ function Layout() {
 
   return (
     <div className="app-root">
-
       {!hideNavBar && <NavBar />}
 
       <main className={hideNavBar ? "no-navbar" : ""}>
-
         <Routes>
-
-          <Route
-            path="/"
-            element={<MainPage />}
-          />
+          <Route path="/" element={<MainPage />} />
 
           <Route
             path="/bilder"
-            element={<BilderPage />}
+            element={
+              <ProtectedGalleryRoute>
+                <BilderPage />
+              </ProtectedGalleryRoute>
+            }
           />
-
         </Routes>
-
       </main>
-
     </div>
   );
 }
 
 function App() {
-
   useEffect(() => {
-    let prevScrollpos = window.pageYOffset;
-    const navbar = document.getElementById("navbar");
+    let previousScrollPosition = window.pageYOffset;
 
-    const onScroll = () => {
-      const currentScrollPos = window.pageYOffset;
+    const handleScroll = () => {
+      const navbar = document.getElementById("navbar");
+      const currentScrollPosition = window.pageYOffset;
 
-      if (!navbar) return;
+      if (!navbar) {
+        return;
+      }
 
-      if (prevScrollpos > currentScrollPos) {
+      if (previousScrollPosition > currentScrollPosition) {
         navbar.style.transform = "translateY(0)";
       } else {
         navbar.style.transform = "translateY(-100%)";
       }
 
-      prevScrollpos = currentScrollPos;
+      previousScrollPosition = currentScrollPosition;
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-
   }, []);
-
 
   return (
     <BrowserRouter>
@@ -97,6 +96,5 @@ function App() {
     </BrowserRouter>
   );
 }
-
 
 export default App;

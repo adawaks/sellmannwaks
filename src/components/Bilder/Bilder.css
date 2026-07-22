@@ -296,3 +296,16 @@ body.presenter-mode {
   cursor: pointer;
   overflow: hidden;
 }
+
+.presenter-overlay {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.presenter-image {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}

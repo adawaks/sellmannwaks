@@ -85,11 +85,11 @@ export default function ScheduleSection() {
 
       <EventBox
         time="Söndag 10:00 – 12:00"
-        title="Brunch"
+        title="Frukost"
         location="Kaffestugan, Nääs Slott (Nääs allé 12, 448 92 Floda)"
         body={
           <>
-            Helgen avrundas med brunch som anordnas av Nääs slott.
+            Helgen avrundas med frukost som anordnas av Nääs slott.
             <br />
             Pris: 195 kr/person, swisha gärna Lotta på 0724474008.
           </>

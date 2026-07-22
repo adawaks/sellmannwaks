@@ -52,7 +52,7 @@ export default function NavBar() {
 
         {/* Desktop links */}
         <div className="nav-links">
-          <a href="#OSA">OSA</a>
+          {/* <a href="#OSA">OSA</a> */}
           <a href="#karta">Var?</a>
           <a href="#schema">Helgens schema</a>
           <a href="#toast">Toastmasters</a>
@@ -67,7 +67,7 @@ export default function NavBar() {
       {/* Mobile dropdown */}
       {open && (
         <div ref={menuRef} className="mobile-menu">
-          <a href="#OSA" onClick={closeMenu}>OSA</a>
+          {/* <a href="#OSA" onClick={closeMenu}>OSA</a> */}
           <a href="#karta" onClick={closeMenu}>Var?</a>
           <a href="#schema" onClick={closeMenu}>Helgens schema</a>
           <a href="#toast" onClick={closeMenu}>Toastmasters</a>

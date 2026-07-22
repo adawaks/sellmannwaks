@@ -1,70 +1,66 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function BilderLink() {
-  const [showPassword, setShowPassword] = useState(false);
+export default function BilderLink() {
+  const navigate = useNavigate();
+
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const correctPassword = "bilder";
 
-  const openGallery = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-    if (password === correctPassword) {
-      window.open("/bilder", "_blank");
-      setPassword("");
-      setShowPassword(false);
-    } else {
-      alert("Fel lösenord");
+    if (password.trim() === correctPassword) {
+      sessionStorage.setItem("galleryAccess", "granted");
+      setError("");
+      navigate("/bilder");
+      return;
     }
 
+    setError("Fel lösenord. Försök igen.");
   };
 
-
   return (
-    <div className="peach-block bilder-section">
+    <section className="bilder-link-section">
+      <h1>Bildgalleri</h1>
 
-      <h1>Bilder</h1>
+      <p>Ange lösenordet för att öppna bildgalleriet.</p>
 
-      <p>
-        Här kommer bilder från vårt bröllop att samlas.
-        Klicka nedan för att öppna bildgalleriet.
-      </p>
+      <form
+        className="bilder-password-form"
+        onSubmit={handleSubmit}
+      >
+        <input
+          className="bilder-password-input"
+          type="password"
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+            setError("");
+          }}
+          placeholder="Lösenord"
+          autoComplete="current-password"
+          aria-label="Lösenord till bildgalleriet"
+        />
 
-
-      {!showPassword && (
         <button
-          className="bilder-button"
-          onClick={() => setShowPassword(true)}
+          className="bilder-link-button"
+          type="submit"
         >
           Öppna bildgalleri
         </button>
+      </form>
+
+      {error && (
+        <p
+          role="alert"
+          className="bilder-password-error"
+        >
+          {error}
+        </p>
       )}
-
-
-      {showPassword && (
-        <div>
-
-          <input
-            type="password"
-            placeholder="Lösenord"
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-          />
-
-
-          <button
-            className="bilder-button"
-            onClick={openGallery}
-          >
-            Logga in
-          </button>
-
-        </div>
-      )}
-
-    </div>
+    </section>
   );
 }
-
-export default BilderLink;

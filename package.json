@@ -2,7 +2,7 @@
   "name": "sellmannwaks",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://www.sellmannwaks.com",
+  "homepage": "https://sellmannwaks.com",
   "dependencies": {
     "@cloudinary/react": "^1.14.4",
     "@cloudinary/url-gen": "^1.22.0",
